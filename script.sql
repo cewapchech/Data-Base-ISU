@@ -84,24 +84,27 @@ ALTER TABLE `пачки` MODIFY COLUMN `пользователь_id` INTEGER NOT
 ALTER TABLE `пачки` ADD CONSTRAINT `fk_пачки_пользователь` FOREIGN KEY (`пользователь_id`) REFERENCES `пользователи` (`id`);
 
 ALTER TABLE `пачки` DROP COLUMN `количество`;
+#правки
+ALTER TABLE `параметры` ADD COLUMN `пачка_id` INTEGER;
+ALTER TABLE `параметры` ADD COLUMN `тип_параметра_id` INTEGER;
+ALTER TABLE `параметры` ADD COLUMN `значение` DECIMAL(10,2);
 
-DELETE FROM `параметры`;
+UPDATE `параметры`
+SET `тип_параметра_id` = 1, `пачка_id` = 1, `значение` = 4.20
+WHERE `код` = 'PAR-001';
 
-ALTER TABLE `параметры` DROP COLUMN `название`;
-ALTER TABLE `параметры` ADD COLUMN `пачка_id` INTEGER NOT NULL;
-ALTER TABLE `параметры` ADD COLUMN `тип_параметра_id` INTEGER NOT NULL;
-ALTER TABLE `параметры` ADD COLUMN `значение` DECIMAL(10,2) NOT NULL;
+UPDATE `параметры`
+SET `тип_параметра_id` = 2, `пачка_id` = 1, `значение` = 78.50
+WHERE `код` = 'PAR-002';
+
+ALTER TABLE `параметры` MODIFY COLUMN `пачка_id` INTEGER NOT NULL;
+ALTER TABLE `параметры` MODIFY COLUMN `тип_параметра_id` INTEGER NOT NULL;
+ALTER TABLE `параметры` MODIFY COLUMN `значение` DECIMAL(10,2) NOT NULL;
 
 ALTER TABLE `параметры` ADD CONSTRAINT `fk_параметры_пачка` FOREIGN KEY (`пачка_id`) REFERENCES `пачки` (`id`);
 ALTER TABLE `параметры` ADD CONSTRAINT `fk_параметры_тип` FOREIGN KEY (`тип_параметра_id`) REFERENCES `типы_параметров` (`id`);
 
-INSERT INTO `параметры` (`id`, `код`, `пачка_id`, `тип_параметра_id`, `значение`)
-SELECT 1, 'PAR-001', 1, 1, 4.20
-WHERE NOT EXISTS (SELECT 1 FROM `параметры` WHERE `код` = 'PAR-001');
-
-INSERT INTO `параметры` (`id`, `код`, `пачка_id`, `тип_параметра_id`, `значение`)
-SELECT 2, 'PAR-002', 1, 2, 78.50
-WHERE NOT EXISTS (SELECT 1 FROM `параметры` WHERE `код` = 'PAR-002');
+ALTER TABLE `параметры` DROP COLUMN `название`;
 
 INSERT INTO `параметры` (`id`, `код`, `пачка_id`, `тип_параметра_id`, `значение`)
 SELECT 3, 'PAR-003', 1, 3, 12.00
