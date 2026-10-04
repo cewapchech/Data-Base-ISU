@@ -1,3 +1,4 @@
+
 INSERT INTO пользователи (id, код, имя, должность_id) VALUES
     (3, 'USR-003', 'Сидоров Сидор', 2)
 ON CONFLICT DO NOTHING;
